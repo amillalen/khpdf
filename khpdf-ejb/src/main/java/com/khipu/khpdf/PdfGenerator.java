@@ -4,6 +4,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.itextpdf.tool.xml.exceptions.RuntimeWorkerException;
 
 import javax.ejb.Stateless;
 import java.io.ByteArrayInputStream;
@@ -19,12 +20,9 @@ public class PdfGenerator implements PdfGeneratorRemote {
     @Override
     public byte[] pdfFromHtml(byte[] html, Map<PdfFields,String> fields) {
         try {
-            System.out.println("............................hit");
-
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Document document = new Document();
             PdfWriter writer = PdfWriter.getInstance(document, os);
-
             document.open();
             for (PdfFields key: fields.keySet()) {
                 switch (key){
@@ -41,21 +39,13 @@ public class PdfGenerator implements PdfGeneratorRemote {
                         document.addCreator(fields.get(key));
                 }
             }
-
-
             InputStream is = new ByteArrayInputStream(html);
-
             XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
-
             document.close();
-
             return os.toByteArray();
 
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            //throw new NullPointerException("blabla");
+        } catch (DocumentException | IOException | RuntimeWorkerException e) {
+            return null;
         }
-        return null;
-
     }
 }
