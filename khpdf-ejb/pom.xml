@@ -3,7 +3,7 @@
     <parent>
         <artifactId>khpdf</artifactId>
         <groupId>com.khipu.khpdf</groupId>
-        <version>0.1</version>
+        <version>0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.khipu.khpdf</groupId>
             <artifactId>khpdf-api</artifactId>
-            <version>0.1</version>
+            <version>0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.main.extras</groupId>
