@@ -8,6 +8,8 @@ import com.itextpdf.text.pdf.security.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -16,14 +18,15 @@ import java.security.cert.Certificate;
 import java.util.Map;
 
 @Stateless
-public class PdfSigner implements PdfSignerRemote {
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+public class PdfSignerImpl implements PdfSigner, PdfSignerRemote {
 
     @Override
-    public byte[] signPdf(byte[] pdfData, PrivateKey pk, Certificate[] chain, Map<PdfSignatureFields, String> params) {
+    public byte[] signPdf(byte[] pdfData, PrivateKey pk, Certificate[] chain, Map<PdfSignatureFields, String> params)
+        throws DocumentGenerationException {
 
-        try {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             PdfReader reader = new PdfReader(pdfData);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             PdfStamper pdfStamper = PdfStamper.createSignature(reader, bos, '\0');
             PdfSignatureAppearance appearance = pdfStamper.getSignatureAppearance();
             for (PdfSignatureFields key : params.keySet()) {
@@ -43,12 +46,11 @@ public class PdfSigner implements PdfSignerRemote {
             MakeSignature.signDetached(appearance, digest, signature, chain, null, null, null, 0, MakeSignature.CryptoStandard.CMS);
 
             pdfStamper.close();
-            bos.close();
             reader.close();
             return bos.toByteArray();
 
         } catch (IOException | GeneralSecurityException | DocumentException e) {
-            return null;
+            throw new DocumentGenerationException(e);
         }
     }
 

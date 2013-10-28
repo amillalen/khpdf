@@ -1,14 +1,14 @@
 package com.khipu.khpdf;
 
-
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.util.Map;
 
-@Remote
-public interface PdfSignerRemote {
+@Local
+public interface PdfSigner {
 
     public byte[] signPdf(byte[] pdfData, PrivateKey pk, Certificate[] chain, Map<PdfSignatureFields, String> params)
             throws DocumentGenerationException;
+
 }

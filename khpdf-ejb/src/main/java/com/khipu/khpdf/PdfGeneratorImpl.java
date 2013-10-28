@@ -6,21 +6,30 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.itextpdf.tool.xml.exceptions.RuntimeWorkerException;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-
 @Stateless
-public class PdfGenerator implements PdfGeneratorRemote {
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+public class PdfGeneratorImpl implements PdfGenerator, PdfGeneratorRemote {
+
+    private XMLWorkerHelper xmlWorkerHelper;
+
+    @PostConstruct
+    public void postConstruct() {
+        xmlWorkerHelper = XMLWorkerHelper.getInstance();
+    }
 
     @Override
-    public byte[] pdfFromHtml(byte[] html, Map<PdfFields,String> fields) {
-        try {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+    public byte[] pdfFromHtml(byte[] html, Map<PdfFields,String> fields) throws DocumentGenerationException {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             Document document = new Document();
             PdfWriter writer = PdfWriter.getInstance(document, os);
             document.open();
@@ -40,12 +49,12 @@ public class PdfGenerator implements PdfGeneratorRemote {
                 }
             }
             InputStream is = new ByteArrayInputStream(html);
-            XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
+            xmlWorkerHelper.parseXHtml(writer, document, is);
             document.close();
             return os.toByteArray();
 
         } catch (DocumentException | IOException | RuntimeWorkerException e) {
-            return null;
+            throw new DocumentGenerationException(e);
         }
     }
 }
