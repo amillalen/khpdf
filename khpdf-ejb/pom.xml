@@ -3,7 +3,7 @@
     <parent>
         <artifactId>khpdf</artifactId>
         <groupId>com.khipu.khpdf</groupId>
-        <version>0.4</version>
+        <version>0.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.khipu.khpdf</groupId>
             <artifactId>khpdf-api</artifactId>
-            <version>0.4</version>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
 
         <dependency>
