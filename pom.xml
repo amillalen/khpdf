@@ -5,7 +5,7 @@
     <groupId>com.khipu.khpdf</groupId>
     <artifactId>khpdf</artifactId>
     <packaging>pom</packaging>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
 
     <name>khpdf</name>
     <url>http://khipu.com</url>
@@ -22,7 +22,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:khipu/khpdf.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>khpdf-0.5</tag>
   </scm>
 
     <dependencyManagement>
