@@ -21,17 +21,16 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.3</version>
+            <version>5.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf.tool</groupId>
             <artifactId>xmlworker</artifactId>
-            <version>5.5.3</version>
+            <version>5.5.4</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
